@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   mariadb:
-    image: mariadb:latest
+    image: mysql:5.7
+    command: --sql-mode=STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -10,7 +11,8 @@ services:
       MYSQL_USER: sumaxalex81
       MYSQL_PASSWORD: Jupiter1
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d
 
   web:
     image: sumaxalex81/proyecto_docker:v1
@@ -18,7 +20,7 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - mariadb
+      - db
 
 volumes:
   mariadb_data: {}
